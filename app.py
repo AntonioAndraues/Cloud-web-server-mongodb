@@ -81,8 +81,11 @@ class ListaTarefas(Resource):
     def post(self):
         atualiza_tarefas()
         args = parser.parse_args()
-        tarefa_id = int(max(Tarefas.keys()).lstrip('tarefa')) + 1
-        tarefa_id = 'tarefa%i' % tarefa_id
+        if(len(Tarefas)==0):
+            tarefa_id='tarefa1'
+        else:
+            tarefa_id = int(max(Tarefas.keys()).lstrip('tarefa')) + 1
+            tarefa_id = 'tarefa%i' % tarefa_id
         try:
             post_data ={'_id': tarefa_id, 'tarefa': args['tarefa'], 'ativo' : '1' }
             result = posts.insert_one(post_data)
