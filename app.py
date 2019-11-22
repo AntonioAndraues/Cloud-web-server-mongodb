@@ -28,10 +28,6 @@ def atualiza_tarefas():
             print(str(e))
         
 
-parser = reqparse.RequestParser()
-parser.add_argument('tarefa')
-
-
 class Tarefa(Resource):
     def get(self, tarefa_id):
         atualiza_tarefas()
@@ -73,23 +69,22 @@ class Tarefa(Resource):
 
 
 class ListaTarefas(Resource):
-    def get(self):
+    def get(self, tarefa):
         atualiza_tarefas()
         Tarefas_ativas=[Tarefas[tarefa_ativa] for tarefa_ativa in Tarefas if Tarefas[tarefa_ativa]["ativo"]!="0"]
         return Tarefas_ativas
 
-    def post(self):
+    def post(self,tarefa):
         atualiza_tarefas()
-        args = parser.parse_args()
         if(len(Tarefas)==0):
             tarefa_id='tarefa1'
         else:
             tarefa_id = int(max(Tarefas.keys()).lstrip('tarefa')) + 1
             tarefa_id = 'tarefa%i' % tarefa_id
         try:
-            post_data ={'_id': tarefa_id, 'tarefa': args['tarefa'], 'ativo' : '1' }
+            post_data ={'_id': tarefa_id, 'tarefa': tarefa, 'ativo' : '1' }
             result = posts.insert_one(post_data)
-            Tarefas[tarefa_id] = {'tarefa': args['tarefa'], 'ativo': "1"}
+            Tarefas[tarefa_id] = {'tarefa': tarefa, 'ativo': "1"}
             return Tarefas[tarefa_id], 201
         except Exception as e:
             return f'Erro: {str(e)}', 400
@@ -99,8 +94,8 @@ class HealthCheck(Resource):
     def get(self):
         return 200
 
-api.add_resource(ListaTarefas, '/Tarefa')
 api.add_resource(Tarefa, '/Tarefa/<tarefa_id>')
+api.add_resource(ListaTarefas, '/Tarefas/<tarefa>')
 api.add_resource(HealthCheck, '/healthcheck')
 
 
