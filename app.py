@@ -69,7 +69,7 @@ class Tarefa(Resource):
 
 
 class ListaTarefas(Resource):
-    def get(self, tarefa):
+    def get(self):
         atualiza_tarefas()
         Tarefas_ativas=[Tarefas[tarefa_ativa] for tarefa_ativa in Tarefas if Tarefas[tarefa_ativa]["ativo"]!="0"]
         return Tarefas_ativas
@@ -96,6 +96,7 @@ class HealthCheck(Resource):
 
 api.add_resource(Tarefa, '/Tarefa/<tarefa_id>')
 api.add_resource(ListaTarefas, '/Tarefas/<tarefa>')
+api.add_resource(ListaTarefas, '/Tarefas/')
 api.add_resource(HealthCheck, '/healthcheck')
 
 
