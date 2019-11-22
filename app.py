@@ -95,7 +95,7 @@ class HealthCheck(Resource):
         return 200
 
 api.add_resource(Tarefa, '/Tarefa/<tarefa_id>')
-api.add_resource(ListaTarefas, '/Tarefas/<tarefa>', '/Tarefas')
+api.add_resource(ListaTarefas, '/Tarefas/<tarefa>', '/Tarefas/')
 api.add_resource(HealthCheck, '/healthcheck','/')
 
 
