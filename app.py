@@ -15,6 +15,9 @@ posts = db.posts
 Tarefas={ 
 }
 
+parser = reqparse.RequestParser()
+parser.add_argument('tarefa', type=str)
+
 def tarefa_nao_existe(tarefa_id):
     if tarefa_id not in Tarefas:
         if("tarefa"+tarefa_id in Tarefas):
@@ -51,13 +54,15 @@ class Tarefa(Resource):
         
         
 
-    def put(self, tarefa_id,tarefa):
+    def put(self, tarefa_id):
         atualiza_tarefas()
         tarefa_id=tarefa_nao_existe(tarefa_id)
-        tarefa = {'tarefa': tarefa, 'ativo': '1'}
+        request.get_json(force=True)
+        args = parser.parse_args()
+        tarefa_post = {'tarefa': args['tarefa'], 'ativo': '1'}
         try:
             myquery = { "_id": tarefa_id}
-            newvalues = { "$set": { "tarefa":args['tarefa'],"ativo": "1" } }
+            newvalues = { "$set": tarefa_post }
             posts.update_one(myquery, newvalues)
             Tarefas[tarefa_id] = tarefa
             return tarefa, 201
@@ -68,13 +73,16 @@ class Tarefa(Resource):
 
 
 class ListaTarefas(Resource):
-    def get(self, tarefa=None):
+    def get(self):
         atualiza_tarefas()
         Tarefas_ativas=[Tarefas[tarefa_ativa] for tarefa_ativa in Tarefas if Tarefas[tarefa_ativa]["ativo"]!="0"]
         return Tarefas_ativas
 
-    def post(self,tarefa):
+    def post(self):
         atualiza_tarefas()
+        request.get_json(force=True)
+        args = parser.parse_args()
+        tarefa=args['tarefa']
         if(len(Tarefas)==0):
             tarefa_id='tarefa1'
         else:
@@ -93,8 +101,8 @@ class HealthCheck(Resource):
     def get(self):
         return 200
 
-api.add_resource(Tarefa, '/Tarefa/<tarefa_id>','/Tarefa/<tarefa_id>/<tarefa>')
-api.add_resource(ListaTarefas, '/Tarefas/<tarefa>', '/Tarefas/')
+api.add_resource(Tarefa, '/Tarefa/<tarefa_id>')
+api.add_resource(ListaTarefas, '/Tarefas/')
 api.add_resource(HealthCheck, '/healthcheck','/')
 
 
