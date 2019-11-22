@@ -51,11 +51,10 @@ class Tarefa(Resource):
         
         
 
-    def put(self, tarefa_id):
+    def put(self, tarefa_id,tarefa):
         atualiza_tarefas()
         tarefa_id=tarefa_nao_existe(tarefa_id)
-        args = parser.parse_args()
-        tarefa = {'tarefa': args['tarefa'], 'ativo': '1'}
+        tarefa = {'tarefa': tarefa, 'ativo': '1'}
         try:
             myquery = { "_id": tarefa_id}
             newvalues = { "$set": { "tarefa":args['tarefa'],"ativo": "1" } }
@@ -94,7 +93,7 @@ class HealthCheck(Resource):
     def get(self):
         return 200
 
-api.add_resource(Tarefa, '/Tarefa/<tarefa_id>')
+api.add_resource(Tarefa, '/Tarefa/<tarefa_id>','/Tarefa/<tarefa_id>/<tarefa>')
 api.add_resource(ListaTarefas, '/Tarefas/<tarefa>', '/Tarefas/')
 api.add_resource(HealthCheck, '/healthcheck','/')
 
