@@ -7,8 +7,15 @@ import sys
     
 app = Flask(__name__)
 api = Api(app)
+client = MongoClient(sys.argv[1], int(sys.argv[2]))
+db = client.tarefas
+db = client['tarefas']
+posts = db.posts
+Tarefas={ 
+}
 parser = reqparse.RequestParser()
 parser.add_argument('tarefa', type=str)
+
 
 def tarefa_nao_existe(tarefa_id):
     if tarefa_id not in Tarefas:
