@@ -49,8 +49,8 @@ class Tarefa(Resource):
         atualiza_tarefas()
         tarefa_id=tarefa_nao_existe(tarefa_id)
         try:
-            myquery = { "_id": tarefa_id, "ativo": "1" }
-            newvalues = { "$set": { "_id": tarefa_id, "ativo": "0" } }
+            myquery = { "_id": tarefa_id}
+            newvalues = { "$set": { "ativo": "0" } }
             posts.update_one(myquery, newvalues)
             Tarefas[tarefa_id]={"tarefa":Tarefas[tarefa_id]["tarefa"],"ativo":'0'}
             return 'tarefa deletada', 204
