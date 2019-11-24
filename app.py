@@ -23,12 +23,6 @@ def tarefa_nao_existe(tarefa_id):
             return "tarefa"+tarefa_id 
         abort(404, message="Tarefa {} não existe".format(tarefa_id))
 def atualiza_tarefas():
-    client = MongoClient(sys.argv[1], int(sys.argv[2]))
-    db = client.tarefas
-    db = client['tarefas']
-    posts = db.posts
-    Tarefas={ 
-    }
     for x in posts.find():
         try:
             Tarefas[x['_id']]=  {'tarefa': x['tarefa'], 'ativo': x['ativo']}
@@ -46,9 +40,14 @@ class Tarefa(Resource):
             abort(404, message="{} está inativa".format(tarefa_id))
 
     def delete(self, tarefa_id):
+        print(tarefa_id)
         atualiza_tarefas()
+
+
+        print(tarefa_id)
         tarefa_id=tarefa_nao_existe(tarefa_id)
         try:
+            print(tarefa_id)
             myquery = { "_id": tarefa_id}
             newvalues = { "$set": { "ativo": "0" } }
             posts.update_one(myquery, newvalues)
