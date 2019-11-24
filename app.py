@@ -7,17 +7,6 @@ import sys
     
 app = Flask(__name__)
 api = Api(app)
-
-client = MongoClient(sys.argv[1], int(sys.argv[2]))
-print(client)
-print("\n")
-db = client.tarefas
-db = client['tarefas']
-posts = db.posts
-print(posts)
-Tarefas={ 
-}
-
 parser = reqparse.RequestParser()
 parser.add_argument('tarefa', type=str)
 
@@ -27,6 +16,12 @@ def tarefa_nao_existe(tarefa_id):
             return "tarefa"+tarefa_id 
         abort(404, message="Tarefa {} não existe".format(tarefa_id))
 def atualiza_tarefas():
+    client = MongoClient(sys.argv[1], int(sys.argv[2]))
+    db = client.tarefas
+    db = client['tarefas']
+    posts = db.posts
+    Tarefas={ 
+    }
     for x in posts.find():
         try:
             Tarefas[x['_id']]=  {'tarefa': x['tarefa'], 'ativo': x['ativo']}
