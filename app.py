@@ -9,6 +9,8 @@ app = Flask(__name__)
 api = Api(app)
 
 client = MongoClient(sys.argv[1], int(sys.argv[2]))
+print(client)
+print("\n")
 db = client.tarefas
 db = client['tarefas']
 posts = db.posts
