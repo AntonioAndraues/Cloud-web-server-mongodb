@@ -14,6 +14,7 @@ print("\n")
 db = client.tarefas
 db = client['tarefas']
 posts = db.posts
+print(posts)
 Tarefas={ 
 }
 
